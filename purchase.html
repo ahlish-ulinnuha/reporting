@@ -494,7 +494,7 @@
         function generateFormattedString() {
             let result = '/laporan\n';
             
-            const stores = ['jg1', 'jg2', 'jg3'];
+            const stores = ['jg1', 'jg2'];
             const categories = ['frozen', 'lain', 'bumbu'];
             const categoryLabels = {
                 'frozen': 'Frozen',
@@ -527,7 +527,7 @@
         }
 
         function updateBadges() {
-            ['jg1', 'jg2', 'jg3'].forEach(storeId => {
+            ['jg1', 'jg2'].forEach(storeId => {
                 const frozen = document.getElementById(`${storeId}-frozen`).value.trim();
                 const lain = document.getElementById(`${storeId}-lain`).value.trim();
                 const bumbu = document.getElementById(`${storeId}-bumbu`).value.trim();

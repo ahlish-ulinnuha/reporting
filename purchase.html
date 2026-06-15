@@ -364,11 +364,7 @@
             <button class="store-tab" data-store="jg2">
                 🏪 JG2
                 <span class="badge" id="badge-jg2">0</span>
-            </button>
-            <button class="store-tab" data-store="jg3">
-                🏪 JG3
-                <span class="badge" id="badge-jg3">0</span>
-            </button>
+            </button>            
         </div>
 
         <form id="purchaseForm">
@@ -379,7 +375,7 @@
                     <textarea 
                         id="jg1-frozen" 
                         name="jg1-frozen" 
-                        placeholder="Masukkan item (satu per baris)"
+                        placeholder="Masukkan item (satu per baris), contoh: &#10; - chikuwa &#10; - sosis jumbo &#10; - baso lobster"
                     ></textarea>
                 </div>
 
@@ -387,8 +383,8 @@
                     <label for="jg1-lain">Lain</label>
                     <textarea 
                         id="jg1-lain" 
-                        name="jg1-lain" 
-                        placeholder="Masukkan item (satu per baris)"
+                        name="jg1-lain"                         
+                        placeholder="Masukkan item (satu per baris), contoh: &#10; - sterofoam"
                     ></textarea>
                 </div>
 
@@ -397,7 +393,7 @@
                     <textarea 
                         id="jg1-bumbu" 
                         name="jg1-bumbu" 
-                        placeholder="Masukkan item (satu per baris)"
+                        placeholder="Masukkan item (satu per baris), contoh: &#10; - merah 1 &#10; - putih 2"
                     ></textarea>
                 </div>
             </div>
@@ -409,7 +405,7 @@
                     <textarea 
                         id="jg2-frozen" 
                         name="jg2-frozen" 
-                        placeholder="Masukkan item (satu per baris)"
+                        placeholder="Masukkan item (satu per baris), contoh: &#10; - chikuwa &#10; - sosis jumbo &#10; - baso lobster"
                     ></textarea>
                 </div>
 
@@ -418,7 +414,7 @@
                     <textarea 
                         id="jg2-lain" 
                         name="jg2-lain" 
-                        placeholder="Masukkan item (satu per baris)"
+                        placeholder="Masukkan item (satu per baris), contoh: &#10; - sterofoam"
                     ></textarea>
                 </div>
 
@@ -427,37 +423,7 @@
                     <textarea 
                         id="jg2-bumbu" 
                         name="jg2-bumbu" 
-                        placeholder="Masukkan item (satu per baris)"
-                    ></textarea>
-                </div>
-            </div>
-
-            <!-- JG3 Tab -->
-            <div id="jg3" class="tab-content">
-                <div class="form-group">
-                    <label for="jg3-frozen">Frozen</label>
-                    <textarea 
-                        id="jg3-frozen" 
-                        name="jg3-frozen" 
-                        placeholder="Masukkan item (satu per baris)"
-                    ></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="jg3-lain">Lain</label>
-                    <textarea 
-                        id="jg3-lain" 
-                        name="jg3-lain" 
-                        placeholder="Masukkan item (satu per baris)"
-                    ></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="jg3-bumbu">Bumbu</label>
-                    <textarea 
-                        id="jg3-bumbu" 
-                        name="jg3-bumbu" 
-                        placeholder="Masukkan item (satu per baris)"
+                        placeholder="Masukkan item (satu per baris), contoh: &#10; - merah 1 &#10; - putih 2"
                     ></textarea>
                 </div>
             </div>
@@ -545,11 +511,11 @@
                         const storeUpper = store.toUpperCase();
                         const categoryLabel = categoryLabels[category];
                         
-                        result += `${categoryLabel} ${storeUpper}\n\n`;
+                        result += `${categoryLabel} ${storeUpper}\n`;
                         
                         const items = value.split('\n').filter(item => item.trim());
                         items.forEach(item => {
-                            result += `* ${item.trim()}\n`;
+                            result += `${item.trim()}\n`;
                         });
                         
                         result += '\n';

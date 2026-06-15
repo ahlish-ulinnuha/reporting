@@ -448,16 +448,24 @@
     <script>
         // ⚠️ PENTING: Ganti dengan URL Google Apps Script Anda
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBbHXWyq-cdY39dXGHR8cM2H9q9sttHZsHpmTiSylHoub5jpMzAWFVlzRB0pnmXc4u3A/exec';
-
+ 
         const form = document.getElementById('purchaseForm');
         const statusMessage = document.getElementById('statusMessage');
         const summarySection = document.getElementById('summarySection');
         const summaryContent = document.getElementById('summaryContent');
+        const responseSection = document.getElementById('responseSection');
+        const responseBox = document.getElementById('responseBox');
+        const responseTitle = document.getElementById('responseTitle');
+        const responseMessage = document.getElementById('responseMessage');
+        const responseSummary = document.getElementById('responseSummary');
         const submitBtn = document.getElementById('submitBtn');
+        const submitToScriptBtn = document.getElementById('submitToScriptBtn');
         const copyBtn = document.getElementById('copyBtn');
         const storeTabs = document.querySelectorAll('.store-tab');
         const storeContents = document.querySelectorAll('.tab-content');
-
+ 
+        let currentFormattedString = '';
+ 
         // Tab switching
         storeTabs.forEach(tab => {
             tab.addEventListener('click', () => {
@@ -465,69 +473,66 @@
                 
                 storeTabs.forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
-
+ 
                 storeContents.forEach(content => content.classList.remove('active'));
                 document.getElementById(storeId).classList.add('active');
             });
         });
-
-        // Form submission
+ 
+        // Form submission - Preview
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-
+ 
             // Generate formatted string
-            const formattedString = generateFormattedString();
-
-            if (!formattedString || formattedString.trim() === '/laporan') {
+            currentFormattedString = generateFormattedString();
+ 
+            if (!currentFormattedString || currentFormattedString.trim() === '/laporan') {
                 showStatus('❌ Mohon isi minimal satu item', 'error');
                 return;
             }
-
-            if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_SCRIPT_URL') {
-                showStatus('❌ Silakan set Google Apps Script URL terlebih dahulu', 'error');
-                return;
-            }
-
-            await submitRequest(formattedString);
+ 
+            // Tampilkan preview
+            displaySummary(currentFormattedString);
+            showStatus('✅ Preview generated! Klik "Submit to Google" untuk mengirim.', 'success');
         });
-
+ 
         function generateFormattedString() {
             let result = '/laporan\n';
             
-            const stores = ['jg1', 'jg2'];
+            const stores = ['jg1', 'jg2', 'jg3'];
             const categories = ['frozen', 'lain', 'bumbu'];
             const categoryLabels = {
                 'frozen': 'Frozen',
                 'lain': 'Lain',
                 'bumbu': 'Bumbu'
             };
-
+ 
             stores.forEach(store => {
                 categories.forEach(category => {
                     const textarea = document.getElementById(`${store}-${category}`);
                     const value = textarea.value.trim();
-
+ 
                     if (value) {
                         const storeUpper = store.toUpperCase();
                         const categoryLabel = categoryLabels[category];
                         
-                        result += `${categoryLabel} ${storeUpper}\n`;
+                        result += `${categoryLabel} ${storeUpper}\n\n`;
                         
                         const items = value.split('\n').filter(item => item.trim());
                         items.forEach(item => {
-                            result += `${item.trim()}\n`;
+                            result += `* ${item.trim()}\n`;
                         });
                         
                         result += '\n';
                     }
                 });
             });
-
+ 
             return result.trim();
         }
-
+ 
         function updateBadges() {
-            ['jg1', 'jg2'].forEach(storeId => {
+            ['jg1', 'jg2', 'jg3'].forEach(storeId => {
                 const frozen = document.getElementById(`${storeId}-frozen`).value.trim();
                 const lain = document.getElementById(`${storeId}-lain`).value.trim();
                 const bumbu = document.getElementById(`${storeId}-bumbu`).value.trim();
@@ -536,16 +541,31 @@
                 document.getElementById(`badge-${storeId}`).textContent = count;
             });
         }
-
+ 
         form.addEventListener('input', updateBadges);
-
-        async function submitRequest(formattedString) {
-            submitBtn.disabled = true;
-            showStatus('📤 Mengirim..', 'loading');
-            summarySection.classList.remove('visible');
-
+ 
+        // Submit ke Google Apps Script Web App
+        submitToScriptBtn.addEventListener('click', async () => {
+            if (!currentFormattedString) {
+                showStatus('❌ Silakan buat preview terlebih dahulu', 'error');
+                return;
+            }
+ 
+            if (WEB_APP_URL === 'https://script.google.com/macros/d/YOUR_SCRIPT_ID/useweb/exec') {
+                showStatus('❌ Silakan set Web App URL terlebih dahulu', 'error');
+                return;
+            }
+ 
+            await submitToWebApp(currentFormattedString);
+        });
+ 
+        async function submitToWebApp(formattedString) {
+            submitToScriptBtn.disabled = true;
+            showStatus('📤 Mengirim ke Google Apps Script...', 'loading');
+            responseSection.style.display = 'none';
+ 
             try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                const response = await fetch(WEB_APP_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -553,45 +573,88 @@
                     body: JSON.stringify({
                         action: 'generateSummary',
                         rawText: formattedString
-                    }),
-                    mode: 'no-cors'
+                    })
                 });
-
-                await new Promise(resolve => setTimeout(resolve, 1000));
-
-                showStatus('✅ Berhasil dikirim!', 'success');
-                displaySummary(formattedString);
+ 
+                const responseData = await response.json();
+                
+                showStatus('✅ Response diterima!', 'success');
+                displayResponse(responseData);
                 form.reset();
+                summarySection.style.display = 'none';
                 updateBadges();
-
+ 
             } catch (error) {
                 console.error('Error:', error);
-                showStatus('❌ Gagal mengirim. Periksa koneksi dan URL Google Script.', 'error');
+                showStatus('❌ Gagal mengirim. Periksa URL Web App.', 'error');
+                displayErrorResponse(error.message);
             } finally {
-                submitBtn.disabled = false;
+                submitToScriptBtn.disabled = false;
             }
         }
-
+ 
         function showStatus(message, type) {
             statusMessage.textContent = message;
             statusMessage.className = `status-message visible status-${type}`;
-
+ 
             if (type !== 'loading') {
                 setTimeout(() => {
                     statusMessage.classList.remove('visible');
-                }, 4000);
+                }, 5000);
             }
         }
-
+ 
         function displaySummary(formattedString) {
             summaryContent.textContent = formattedString;
             summarySection.classList.add('visible');
         }
-
+ 
+        function displayResponse(data) {
+            responseSection.style.display = 'block';
+            
+            // Cek apakah response berhasil atau error
+            if (data.success || data.message) {
+                responseBox.className = 'response-box response-success';
+                responseTitle.textContent = '✅ Berhasil Diproses!';
+                responseMessage.textContent = data.message || 'Request berhasil diproses';
+                
+                // Tampilkan summary atau response lainnya
+                if (data.summary) {
+                    responseSummary.textContent = data.summary;
+                } else if (data.result) {
+                    responseSummary.textContent = data.result;
+                } else if (typeof data === 'string') {
+                    responseSummary.textContent = data;
+                } else {
+                    responseSummary.textContent = JSON.stringify(data, null, 2);
+                }
+            } else {
+                responseBox.className = 'response-box response-error';
+                responseTitle.textContent = '❌ Error';
+                responseMessage.textContent = data.error || 'Terjadi kesalahan saat memproses data';
+                responseSummary.textContent = JSON.stringify(data, null, 2);
+            }
+ 
+            // Scroll ke response
+            responseSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+ 
+        function displayErrorResponse(errorMessage) {
+            responseSection.style.display = 'block';
+            responseBox.className = 'response-box response-error';
+            responseTitle.textContent = '❌ Error';
+            responseMessage.textContent = `Error: ${errorMessage}`;
+            responseSummary.textContent = 'Pastikan URL Web App sudah benar dan script sudah di-deploy.';
+        }
+ 
         // Copy to clipboard
         copyBtn.addEventListener('click', () => {
-            const text = summaryContent.textContent;
-            navigator.clipboard.writeText(text).then(() => {
+            if (!currentFormattedString) {
+                showStatus('❌ Tidak ada text untuk di-copy', 'error');
+                return;
+            }
+ 
+            navigator.clipboard.writeText(currentFormattedString).then(() => {
                 const originalText = copyBtn.textContent;
                 copyBtn.textContent = '✅ Copied!';
                 setTimeout(() => {
@@ -599,7 +662,7 @@
                 }, 2000);
             });
         });
-
+ 
         updateBadges();
     </script>
 </body>

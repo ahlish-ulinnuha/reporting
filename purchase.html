@@ -270,27 +270,33 @@
             margin-bottom: 16px;
         }
 
-        .summary-store {
-            margin-bottom: 20px;
-            padding: 16px;
+        .summary-content {
             background: #f7fafc;
+            padding: 20px;
             border-radius: 8px;
             border-left: 4px solid #667eea;
-        }
-
-        .summary-store-name {
-            font-weight: 600;
-            color: #667eea;
-            font-size: 15px;
-            margin-bottom: 12px;
-        }
-
-        .summary-content {
             color: #2d3748;
             font-size: 13px;
-            line-height: 1.6;
+            line-height: 1.8;
             white-space: pre-wrap;
             word-break: break-word;
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+        }
+
+        .copy-btn {
+            background: #667eea;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: #764ba2;
         }
 
         .info-box {
@@ -309,19 +315,6 @@
             border-radius: 3px;
             font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
             color: #764ba2;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #718096;
-        }
-
-        .empty-state svg {
-            width: 60px;
-            height: 60px;
-            margin-bottom: 16px;
-            opacity: 0.5;
         }
 
         @media (max-width: 600px) {
@@ -357,114 +350,137 @@
     <div class="container">
         <div class="header">
             <h1>Multi-Store Purchase Request</h1>
-            <p>Submit items for tomorrow's orders across all stores</p>
+            <p>Submit items for tomorrow's orders</p>
         </div>
 
         <div id="statusMessage" class="status-message"></div>
 
         <!-- Store Tabs -->
         <div class="store-tabs">
-            <button class="store-tab active" data-store="store1">
-                🏪 Jagoan 1
-                <span class="badge" id="badge-store1">0</span>
+            <button class="store-tab active" data-store="jg1">
+                🏪 JG1
+                <span class="badge" id="badge-jg1">0</span>
             </button>
-            <button class="store-tab" data-store="store2">
-                🏪 Jagoan 2
-                <span class="badge" id="badge-store2">0</span>
-            </button>            
+            <button class="store-tab" data-store="jg2">
+                🏪 JG2
+                <span class="badge" id="badge-jg2">0</span>
+            </button>
+            <button class="store-tab" data-store="jg3">
+                🏪 JG3
+                <span class="badge" id="badge-jg3">0</span>
+            </button>
         </div>
 
         <form id="purchaseForm">
-            <!-- Store 1 Tab -->
-            <div id="store1" class="tab-content active">
+            <!-- JG1 Tab -->
+            <div id="jg1" class="tab-content active">
                 <div class="form-group">
-                    <label for="store1-frozenFood">
-                        Frozen Food                        
-                    </label>
+                    <label for="jg1-frozen">Frozen</label>
                     <textarea 
-                        id="store1-frozenFood" 
-                        name="store1-frozenFood" 
-                        placeholder="- chikuwa &#10; - sosis jumbo &#10; - baso lobster"
+                        id="jg1-frozen" 
+                        name="jg1-frozen" 
+                        placeholder="Masukkan item (satu per baris)"
                     ></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="store1-others">
-                        Lain-lain                        
-                    </label>
+                    <label for="jg1-lain">Lain</label>
                     <textarea 
-                        id="store1-others" 
-                        name="store1-others" 
-                        placeholder="- thinwall &#10; - paperbow 800ml"
+                        id="jg1-lain" 
+                        name="jg1-lain" 
+                        placeholder="Masukkan item (satu per baris)"
                     ></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="store1-bumbu">
-                        Bumbu                        
-                    </label>
+                    <label for="jg1-bumbu">Bumbu</label>
                     <textarea 
-                        id="store1-bumbu" 
-                        name="store1-bumbu" 
-                        placeholder="- merah 1 &#10; - putih 2"
+                        id="jg1-bumbu" 
+                        name="jg1-bumbu" 
+                        placeholder="Masukkan item (satu per baris)"
                     ></textarea>
-                </div>                
+                </div>
             </div>
 
-            <!-- Store 2 Tab -->
-            <div id="store2" class="tab-content">
+            <!-- JG2 Tab -->
+            <div id="jg2" class="tab-content">
                 <div class="form-group">
-                    <label for="store2-frozenFood">
-                        Frozen Food                        
-                    </label>
+                    <label for="jg2-frozen">Frozen</label>
                     <textarea 
-                        id="store2-frozenFood" 
-                        name="store2-frozenFood" 
-                        placeholder="- chikuwa &#10; - sosis jumbo &#10; - baso lobster"
-                    ></textarea>
-                </div>
-
-                 <div class="form-group">
-                    <label for="store2-others">
-                        Lain-lain
-                    </label>
-                    <textarea 
-                        id="store2-others" 
-                        name="store2-others" 
-                        placeholder="- thinwall &#10; - paperbowl 800ml"
+                        id="jg2-frozen" 
+                        name="jg2-frozen" 
+                        placeholder="Masukkan item (satu per baris)"
                     ></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="store2-bumbu">
-                        Bumbu                        
-                    </label>
+                    <label for="jg2-lain">Lain</label>
                     <textarea 
-                        id="store2-bumbu" 
-                        name="store2-bumbu" 
-                        placeholder="- merah 1 &#10; - putih 2"
+                        id="jg2-lain" 
+                        name="jg2-lain" 
+                        placeholder="Masukkan item (satu per baris)"
                     ></textarea>
-                </div>               
-            </div>            
+                </div>
+
+                <div class="form-group">
+                    <label for="jg2-bumbu">Bumbu</label>
+                    <textarea 
+                        id="jg2-bumbu" 
+                        name="jg2-bumbu" 
+                        placeholder="Masukkan item (satu per baris)"
+                    ></textarea>
+                </div>
+            </div>
+
+            <!-- JG3 Tab -->
+            <div id="jg3" class="tab-content">
+                <div class="form-group">
+                    <label for="jg3-frozen">Frozen</label>
+                    <textarea 
+                        id="jg3-frozen" 
+                        name="jg3-frozen" 
+                        placeholder="Masukkan item (satu per baris)"
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="jg3-lain">Lain</label>
+                    <textarea 
+                        id="jg3-lain" 
+                        name="jg3-lain" 
+                        placeholder="Masukkan item (satu per baris)"
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="jg3-bumbu">Bumbu</label>
+                    <textarea 
+                        id="jg3-bumbu" 
+                        name="jg3-bumbu" 
+                        placeholder="Masukkan item (satu per baris)"
+                    ></textarea>
+                </div>
+            </div>
 
             <div class="form-actions">
-                <button type="submit" class="btn-submit" id="submitBtn">Submit All Stores</button>
-                <button type="reset" class="btn-clear">Clear All</button>
+                <button type="submit" class="btn-submit" id="submitBtn">📤 Submit</button>
+                <button type="reset" class="btn-clear">🗑️ Clear</button>
             </div>
         </form>
 
         <div class="info-box">
-            <strong>Setup Required:</strong> Replace <code>YOUR_GOOGLE_SCRIPT_URL</code> in the JavaScript code with your Google Apps Script deployment URL.
+            <strong>Setup:</strong> Ganti <code>YOUR_GOOGLE_SCRIPT_URL</code> dengan URL Google Apps Script Anda yang sudah di-deploy.
         </div>
 
         <div id="summarySection" class="summary-section">
-            <div class="summary-title">📋 Tomorrow's Request Summary</div>
-            <div id="summaryContent"></div>
+            <div class="summary-title">📋 Formatted Summary</div>
+            <div id="summaryContent" class="summary-content"></div>
+            <button class="copy-btn" id="copyBtn">📋 Copy to Clipboard</button>
         </div>
     </div>
 
     <script>
-        // ⚠️ IMPORTANT: Replace this with your actual Google Apps Script deployment URL
+        // ⚠️ PENTING: Ganti dengan URL Google Apps Script Anda
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBbHXWyq-cdY39dXGHR8cM2H9q9sttHZsHpmTiSylHoub5jpMzAWFVlzRB0pnmXc4u3A/exec';
 
         const form = document.getElementById('purchaseForm');
@@ -472,6 +488,7 @@
         const summarySection = document.getElementById('summarySection');
         const summaryContent = document.getElementById('summaryContent');
         const submitBtn = document.getElementById('submitBtn');
+        const copyBtn = document.getElementById('copyBtn');
         const storeTabs = document.querySelectorAll('.store-tab');
         const storeContents = document.querySelectorAll('.tab-content');
 
@@ -480,11 +497,9 @@
             tab.addEventListener('click', () => {
                 const storeId = tab.dataset.store;
                 
-                // Update active tab
                 storeTabs.forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
 
-                // Update active content
                 storeContents.forEach(content => content.classList.remove('active'));
                 document.getElementById(storeId).classList.add('active');
             });
@@ -494,57 +509,73 @@
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Collect data from all stores
-            const storesData = {
-                store1: collectStoreData('store1'),
-                store2: collectStoreData('store2'),
-                store3: collectStoreData('store3'),
-                timestamp: new Date().toLocaleString()
-            };
+            // Generate formatted string
+            const formattedString = generateFormattedString();
 
-            // Check if at least one store has data
-            const hasData = Object.values(storesData).some((store, idx) => {
-                if (idx < 3) { // Only check first 3 stores
-                    return store.frozenFood || store.bumbu || store.others;
-                }
-                return false;
-            });
-
-            if (!hasData) {
-                showStatus('Please enter at least one item in any store', 'error');
+            if (!formattedString || formattedString.trim() === '/laporan') {
+                showStatus('❌ Mohon isi minimal satu item', 'error');
                 return;
             }
 
             if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_SCRIPT_URL') {
-                showStatus('Please set your Google Apps Script URL in the code first', 'error');
+                showStatus('❌ Silakan set Google Apps Script URL terlebih dahulu', 'error');
                 return;
             }
 
-            await submitRequest(storesData);
+            await submitRequest(formattedString);
         });
 
-        function collectStoreData(storeId) {
-            return {
-                frozenFood: document.getElementById(`${storeId}-frozenFood`).value.trim(),
-                bumbu: document.getElementById(`${storeId}-bumbu`).value.trim(),
-                others: document.getElementById(`${storeId}-others`).value.trim()
+        function generateFormattedString() {
+            let result = '/laporan\n';
+            
+            const stores = ['jg1', 'jg2', 'jg3'];
+            const categories = ['frozen', 'lain', 'bumbu'];
+            const categoryLabels = {
+                'frozen': 'Frozen',
+                'lain': 'Lain',
+                'bumbu': 'Bumbu'
             };
+
+            stores.forEach(store => {
+                categories.forEach(category => {
+                    const textarea = document.getElementById(`${store}-${category}`);
+                    const value = textarea.value.trim();
+
+                    if (value) {
+                        const storeUpper = store.toUpperCase();
+                        const categoryLabel = categoryLabels[category];
+                        
+                        result += `${categoryLabel} ${storeUpper}\n\n`;
+                        
+                        const items = value.split('\n').filter(item => item.trim());
+                        items.forEach(item => {
+                            result += `* ${item.trim()}\n`;
+                        });
+                        
+                        result += '\n';
+                    }
+                });
+            });
+
+            return result.trim();
         }
 
         function updateBadges() {
-            ['store1', 'store2', 'store3'].forEach(storeId => {
-                const data = collectStoreData(storeId);
-                const count = [data.frozenFood, data.bumbu, data.others].filter(x => x).length;
+            ['jg1', 'jg2', 'jg3'].forEach(storeId => {
+                const frozen = document.getElementById(`${storeId}-frozen`).value.trim();
+                const lain = document.getElementById(`${storeId}-lain`).value.trim();
+                const bumbu = document.getElementById(`${storeId}-bumbu`).value.trim();
+                
+                const count = [frozen, lain, bumbu].filter(x => x).length;
                 document.getElementById(`badge-${storeId}`).textContent = count;
             });
         }
 
-        // Update badges on input change
         form.addEventListener('input', updateBadges);
 
-        async function submitRequest(storesData) {
+        async function submitRequest(formattedString) {
             submitBtn.disabled = true;
-            showStatus('📤 Submitting requests for all stores...', 'loading');
+            showStatus('📤 Mengirim..', 'loading');
             summarySection.classList.remove('visible');
 
             try {
@@ -553,20 +584,23 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(storesData),
+                    body: JSON.stringify({
+                        action: 'generateSummary',
+                        rawText: formattedString
+                    }),
                     mode: 'no-cors'
                 });
 
                 await new Promise(resolve => setTimeout(resolve, 1000));
 
-                showStatus('✅ All requests submitted successfully!', 'success');
-                displaySummary(storesData);
+                showStatus('✅ Berhasil dikirim!', 'success');
+                displaySummary(formattedString);
                 form.reset();
                 updateBadges();
 
             } catch (error) {
                 console.error('Error:', error);
-                showStatus('❌ Failed to submit. Check your internet connection and Google Script URL.', 'error');
+                showStatus('❌ Gagal mengirim. Periksa koneksi dan URL Google Script.', 'error');
             } finally {
                 submitBtn.disabled = false;
             }
@@ -583,48 +617,23 @@
             }
         }
 
-        function displaySummary(storesData) {
-            let html = '';
-
-            ['store1', 'store2', 'store3'].forEach((storeId, idx) => {
-                const storeNum = idx + 1;
-                const data = storesData[storeId];
-
-                if (data.frozenFood || data.bumbu || data.others) {
-                    let storeSummary = '';
-
-                    if (data.frozenFood) {
-                        storeSummary += '🧊 FROZEN FOOD\n';
-                        storeSummary += data.frozenFood.split('\n').map(item => `  • ${item.trim()}`).filter(x => x !== '  • ').join('\n') + '\n\n';
-                    }
-
-                    if (data.bumbu) {
-                        storeSummary += '🌶️  BUMBU (SPICES)\n';
-                        storeSummary += data.bumbu.split('\n').map(item => `  • ${item.trim()}`).filter(x => x !== '  • ').join('\n') + '\n\n';
-                    }
-
-                    if (data.others) {
-                        storeSummary += '📦 OTHERS\n';
-                        storeSummary += data.others.split('\n').map(item => `  • ${item.trim()}`).filter(x => x !== '  • ').join('\n');
-                    }
-
-                    html += `
-                        <div class="summary-store">
-                            <div class="summary-store-name">🏪 Store ${storeNum}</div>
-                            <div class="summary-content">${storeSummary.trim()}</div>
-                        </div>
-                    `;
-                }
-            });
-
-            if (html) {
-                html += `<div style="text-align: center; color: #718096; font-size: 12px; margin-top: 16px;">Submitted: ${storesData.timestamp}</div>`;
-                summaryContent.innerHTML = html;
-                summarySection.classList.add('visible');
-            }
+        function displaySummary(formattedString) {
+            summaryContent.textContent = formattedString;
+            summarySection.classList.add('visible');
         }
 
-        // Initialize badges
+        // Copy to clipboard
+        copyBtn.addEventListener('click', () => {
+            const text = summaryContent.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = '✅ Copied!';
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            });
+        });
+
         updateBadges();
     </script>
 </body>

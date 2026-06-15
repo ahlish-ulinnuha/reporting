@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Purchase Request Form</title>
+    <title>Purchase Request</title>
     <style>
         * {
             margin: 0;
@@ -27,13 +27,13 @@
             background: white;
             border-radius: 12px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            max-width: 600px;
+            max-width: 700px;
             width: 100%;
             padding: 40px;
         }
 
         .header {
-            margin-bottom: 30px;
+            margin-bottom: 32px;
             text-align: center;
         }
 
@@ -47,6 +47,76 @@
         .header p {
             color: #718096;
             font-size: 14px;
+        }
+
+        /* Store Tabs */
+        .store-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0;
+            flex-wrap: wrap;
+        }
+
+        .store-tab {
+            padding: 12px 24px;
+            border: none;
+            background: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: #718096;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .store-tab:hover {
+            color: #667eea;
+        }
+
+        .store-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .store-tab .badge {
+            display: inline-block;
+            background: #edf2f7;
+            color: #667eea;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 8px;
+            font-weight: 500;
+        }
+
+        .store-tab.active .badge {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .form-group {
@@ -111,6 +181,7 @@
         .btn-submit {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            grid-column: 1 / -1;
         }
 
         .btn-submit:hover {
@@ -136,48 +207,6 @@
 
         .btn-clear:hover {
             background: #edf2f7;
-        }
-
-        .summary-section {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 2px solid #e2e8f0;
-            display: none;
-        }
-
-        .summary-section.visible {
-            display: block;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .summary-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1a202c;
-            margin-bottom: 16px;
-        }
-
-        .summary-content {
-            background: #f7fafc;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
-            color: #2d3748;
-            font-size: 14px;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            word-break: break-word;
         }
 
         .status-message {
@@ -211,19 +240,57 @@
             border: 1px solid #90cdf4;
         }
 
-        .loader {
-            display: inline-block;
-            width: 4px;
-            height: 4px;
-            margin-right: 6px;
-            background: #2c5282;
-            border-radius: 50%;
-            animation: pulse 1.5s infinite;
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
+        .summary-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e2e8f0;
+            display: none;
+        }
+
+        .summary-section.visible {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .summary-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 16px;
+        }
+
+        .summary-store {
+            margin-bottom: 20px;
+            padding: 16px;
+            background: #f7fafc;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .summary-store-name {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 15px;
+            margin-bottom: 12px;
+        }
+
+        .summary-content {
+            color: #2d3748;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
         }
 
         .info-box {
@@ -244,6 +311,19 @@
             color: #764ba2;
         }
 
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #718096;
+        }
+
+        .empty-state svg {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 24px;
@@ -251,6 +331,20 @@
 
             .header h1 {
                 font-size: 24px;
+            }
+
+            .store-tabs {
+                gap: 4px;
+            }
+
+            .store-tab {
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+
+            .store-tab .badge {
+                margin-left: 4px;
+                font-size: 11px;
             }
 
             .form-actions {
@@ -262,52 +356,100 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Purchase Request</h1>
-            <p>Submit items for tomorrow's orders</p>
+            <h1>Multi-Store Purchase Request</h1>
+            <p>Submit items for tomorrow's orders across all stores</p>
         </div>
 
         <div id="statusMessage" class="status-message"></div>
 
+        <!-- Store Tabs -->
+        <div class="store-tabs">
+            <button class="store-tab active" data-store="store1">
+                🏪 Jagoan 1
+                <span class="badge" id="badge-store1">0</span>
+            </button>
+            <button class="store-tab" data-store="store2">
+                🏪 Jagoan 2
+                <span class="badge" id="badge-store2">0</span>
+            </button>            
+        </div>
+
         <form id="purchaseForm">
-            <div class="form-group">
-                <label for="frozenFood">
-                    Frozen Food
-                    <span class="category-badge">Category 1</span>
-                </label>
-                <textarea 
-                    id="frozenFood" 
-                    name="frozenFood" 
-                    placeholder="List items needed (e.g., frozen vegetables, frozen fish)"
-                ></textarea>
+            <!-- Store 1 Tab -->
+            <div id="store1" class="tab-content active">
+                <div class="form-group">
+                    <label for="store1-frozenFood">
+                        Frozen Food                        
+                    </label>
+                    <textarea 
+                        id="store1-frozenFood" 
+                        name="store1-frozenFood" 
+                        placeholder="- chikuwa \n - sosis jumbo \n - baso lobster"
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="store1-others">
+                        Lain-lain                        
+                    </label>
+                    <textarea 
+                        id="store1-others" 
+                        name="store1-others" 
+                        placeholder="- sterofoam \n - cetik 7x10"
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="store1-bumbu">
+                        Bumbu                        
+                    </label>
+                    <textarea 
+                        id="store1-bumbu" 
+                        name="store1-bumbu" 
+                        placeholder="- merah 1 \n - putih 2"
+                    ></textarea>
+                </div>                
             </div>
 
-            <div class="form-group">
-                <label for="bumbu">
-                    Bumbu
-                    <span class="category-badge">Category 2</span>
-                </label>
-                <textarea 
-                    id="bumbu" 
-                    name="bumbu" 
-                    placeholder="List spices and seasonings needed (e.g., coriander, turmeric)"
-                ></textarea>
-            </div>
+            <!-- Store 2 Tab -->
+            <div id="store2" class="tab-content">
+                <div class="form-group">
+                    <label for="store2-frozenFood">
+                        Frozen Food                        
+                    </label>
+                    <textarea 
+                        id="store2-frozenFood" 
+                        name="store2-frozenFood" 
+                        placeholder="- chikuwa \n - sosis jumbo \n - baso lobster"
+                    ></textarea>
+                </div>
 
-            <div class="form-group">
-                <label for="others">
-                    Others
-                    <span class="category-badge">Category 3</span>
-                </label>
-                <textarea 
-                    id="others" 
-                    name="others" 
-                    placeholder="List other items (e.g., rice, oil, vegetables)"
-                ></textarea>
-            </div>
+                 <div class="form-group">
+                    <label for="store2-others">
+                        Lain-lain
+                    </label>
+                    <textarea 
+                        id="store2-others" 
+                        name="store2-others" 
+                        placeholder="- sterofoam \n - cetik 7x10"
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="store2-bumbu">
+                        Bumbu                        
+                    </label>
+                    <textarea 
+                        id="store2-bumbu" 
+                        name="store2-bumbu" 
+                        placeholder="- merah 1 \n - putih 2"
+                    ></textarea>
+                </div>               
+            </div>            
 
             <div class="form-actions">
-                <button type="submit" class="btn-submit" id="submitBtn">Submit Request</button>
-                <button type="reset" class="btn-clear">Clear Form</button>
+                <button type="submit" class="btn-submit" id="submitBtn">Submit All Stores</button>
+                <button type="reset" class="btn-clear">Clear All</button>
             </div>
         </form>
 
@@ -316,14 +458,13 @@
         </div>
 
         <div id="summarySection" class="summary-section">
-            <div class="summary-title">Tomorrow's Request Summary</div>
-            <div id="summaryContent" class="summary-content"></div>
+            <div class="summary-title">📋 Tomorrow's Request Summary</div>
+            <div id="summaryContent"></div>
         </div>
     </div>
 
     <script>
         // ⚠️ IMPORTANT: Replace this with your actual Google Apps Script deployment URL
-        // Your Apps Script URL should end with /exec
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBbHXWyq-cdY39dXGHR8cM2H9q9sttHZsHpmTiSylHoub5jpMzAWFVlzRB0pnmXc4u3A/exec';
 
         const form = document.getElementById('purchaseForm');
@@ -331,37 +472,79 @@
         const summarySection = document.getElementById('summarySection');
         const summaryContent = document.getElementById('summaryContent');
         const submitBtn = document.getElementById('submitBtn');
+        const storeTabs = document.querySelectorAll('.store-tab');
+        const storeContents = document.querySelectorAll('.tab-content');
 
+        // Tab switching
+        storeTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const storeId = tab.dataset.store;
+                
+                // Update active tab
+                storeTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                // Update active content
+                storeContents.forEach(content => content.classList.remove('active'));
+                document.getElementById(storeId).classList.add('active');
+            });
+        });
+
+        // Form submission
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Validate that at least one field has content
-            const frozenFood = document.getElementById('frozenFood').value.trim();
-            const bumbu = document.getElementById('bumbu').value.trim();
-            const others = document.getElementById('others').value.trim();
+            // Collect data from all stores
+            const storesData = {
+                store1: collectStoreData('store1'),
+                store2: collectStoreData('store2'),
+                store3: collectStoreData('store3'),
+                timestamp: new Date().toLocaleString()
+            };
 
-            if (!frozenFood && !bumbu && !others) {
-                showStatus('Please enter at least one item in any category', 'error');
+            // Check if at least one store has data
+            const hasData = Object.values(storesData).some((store, idx) => {
+                if (idx < 3) { // Only check first 3 stores
+                    return store.frozenFood || store.bumbu || store.others;
+                }
+                return false;
+            });
+
+            if (!hasData) {
+                showStatus('Please enter at least one item in any store', 'error');
                 return;
             }
 
-            // Validate Google Script URL is set
             if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_SCRIPT_URL') {
                 showStatus('Please set your Google Apps Script URL in the code first', 'error');
                 return;
             }
 
-            await submitRequest({
-                frozenFood,
-                bumbu,
-                others,
-                timestamp: new Date().toLocaleString()
-            });
+            await submitRequest(storesData);
         });
 
-        async function submitRequest(data) {
+        function collectStoreData(storeId) {
+            return {
+                frozenFood: document.getElementById(`${storeId}-frozenFood`).value.trim(),
+                bumbu: document.getElementById(`${storeId}-bumbu`).value.trim(),
+                others: document.getElementById(`${storeId}-others`).value.trim()
+            };
+        }
+
+        function updateBadges() {
+            ['store1', 'store2', 'store3'].forEach(storeId => {
+                const data = collectStoreData(storeId);
+                const count = [data.frozenFood, data.bumbu, data.others].filter(x => x).length;
+                document.getElementById(`badge-${storeId}`).textContent = count;
+            });
+        }
+
+        // Update badges on input change
+        form.addEventListener('input', updateBadges);
+
+        async function submitRequest(storesData) {
             submitBtn.disabled = true;
-            showStatus('📤 Submitting your request...', 'loading');
+            showStatus('📤 Submitting requests for all stores...', 'loading');
             summarySection.classList.remove('visible');
 
             try {
@@ -370,17 +553,16 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(data),
+                    body: JSON.stringify(storesData),
                     mode: 'no-cors'
                 });
 
-                // With no-cors mode, we can't directly check response status
-                // Wait a moment for processing, then show success
                 await new Promise(resolve => setTimeout(resolve, 1000));
 
-                showStatus('✅ Request submitted successfully!', 'success');
-                displaySummary(data);
+                showStatus('✅ All requests submitted successfully!', 'success');
+                displaySummary(storesData);
                 form.reset();
+                updateBadges();
 
             } catch (error) {
                 console.error('Error:', error);
@@ -401,31 +583,49 @@
             }
         }
 
-        function displaySummary(data) {
-            let summary = '📋 TOMORROW\'S PURCHASE REQUEST\n\n';
-            summary += '════════════════════════════════\n\n';
+        function displaySummary(storesData) {
+            let html = '';
 
-            if (data.frozenFood) {
-                summary += '🧊 FROZEN FOOD\n';
-                summary += data.frozenFood.split('\n').map(item => `  • ${item.trim()}`).join('\n') + '\n\n';
+            ['store1', 'store2', 'store3'].forEach((storeId, idx) => {
+                const storeNum = idx + 1;
+                const data = storesData[storeId];
+
+                if (data.frozenFood || data.bumbu || data.others) {
+                    let storeSummary = '';
+
+                    if (data.frozenFood) {
+                        storeSummary += '🧊 FROZEN FOOD\n';
+                        storeSummary += data.frozenFood.split('\n').map(item => `  • ${item.trim()}`).filter(x => x !== '  • ').join('\n') + '\n\n';
+                    }
+
+                    if (data.bumbu) {
+                        storeSummary += '🌶️  BUMBU (SPICES)\n';
+                        storeSummary += data.bumbu.split('\n').map(item => `  • ${item.trim()}`).filter(x => x !== '  • ').join('\n') + '\n\n';
+                    }
+
+                    if (data.others) {
+                        storeSummary += '📦 OTHERS\n';
+                        storeSummary += data.others.split('\n').map(item => `  • ${item.trim()}`).filter(x => x !== '  • ').join('\n');
+                    }
+
+                    html += `
+                        <div class="summary-store">
+                            <div class="summary-store-name">🏪 Store ${storeNum}</div>
+                            <div class="summary-content">${storeSummary.trim()}</div>
+                        </div>
+                    `;
+                }
+            });
+
+            if (html) {
+                html += `<div style="text-align: center; color: #718096; font-size: 12px; margin-top: 16px;">Submitted: ${storesData.timestamp}</div>`;
+                summaryContent.innerHTML = html;
+                summarySection.classList.add('visible');
             }
-
-            if (data.bumbu) {
-                summary += '🌶️  BUMBU (SPICES)\n';
-                summary += data.bumbu.split('\n').map(item => `  • ${item.trim()}`).join('\n') + '\n\n';
-            }
-
-            if (data.others) {
-                summary += '📦 OTHERS\n';
-                summary += data.others.split('\n').map(item => `  • ${item.trim()}`).join('\n') + '\n\n';
-            }
-
-            summary += '════════════════════════════════\n';
-            summary += `Submitted: ${data.timestamp}`;
-
-            summaryContent.textContent = summary;
-            summarySection.classList.add('visible');
         }
+
+        // Initialize badges
+        updateBadges();
     </script>
 </body>
 </html>

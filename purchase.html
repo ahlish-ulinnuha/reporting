@@ -440,7 +440,7 @@
 
         <div id="summarySection" class="summary-section">
             <div class="summary-title">📋 Formatted Summary</div>
-            <div id="summaryContent" class="summary-content"></div>
+            <div id="responseSummary" class="summary-content"></div>
             <button class="copy-btn" id="copyBtn">📋 Copy to Clipboard</button>
         </div>
     </div>
@@ -516,11 +516,11 @@
                         const storeUpper = store.toUpperCase();
                         const categoryLabel = categoryLabels[category];
                         
-                        result += `${categoryLabel} ${storeUpper}\n\n`;
+                        result += `${categoryLabel} ${storeUpper}\n`;
                         
                         const items = value.split('\n').filter(item => item.trim());
                         items.forEach(item => {
-                            result += `* ${item.trim()}\n`;
+                            result += `${item.trim()}\n`;
                         });
                         
                         result += '\n';

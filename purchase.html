@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Purchase Request</title>
+    <title>Multi-Store Purchase Request</title>
     <style>
         * {
             margin: 0;
@@ -283,7 +283,7 @@
             font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
         }
 
-        .copy-btn {
+        .btn-action {
             background: #667eea;
             color: white;
             padding: 8px 16px;
@@ -292,11 +292,68 @@
             font-size: 12px;
             cursor: pointer;
             margin-top: 12px;
+            margin-right: 8px;
             transition: all 0.2s;
+            display: inline-block;
         }
 
-        .copy-btn:hover {
+        .btn-action:hover {
             background: #764ba2;
+        }
+
+        .response-box {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+
+        .response-title {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .response-message {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            color: #2d3748;
+            margin-bottom: 12px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .response-summary {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            color: #2d3748;
+            font-size: 12px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .response-success {
+            border-left-color: #48bb78;
+        }
+
+        .response-success .response-title {
+            color: #22543d;
+        }
+
+        .response-error {
+            border-left-color: #f56565;
+        }
+
+        .response-error .response-title {
+            color: #742a2a;
         }
 
         .info-box {
@@ -375,7 +432,7 @@
                     <textarea 
                         id="jg1-frozen" 
                         name="jg1-frozen" 
-                        placeholder="Masukkan item (satu per baris), contoh: &#10; - chikuwa &#10; - sosis jumbo &#10; - baso lobster"
+                        placeholder="Masukkan item (satu per baris)"
                     ></textarea>
                 </div>
 
@@ -383,8 +440,8 @@
                     <label for="jg1-lain">Lain</label>
                     <textarea 
                         id="jg1-lain" 
-                        name="jg1-lain"                         
-                        placeholder="Masukkan item (satu per baris), contoh: &#10; - sterofoam"
+                        name="jg1-lain" 
+                        placeholder="Masukkan item (satu per baris)"
                     ></textarea>
                 </div>
 
@@ -393,7 +450,7 @@
                     <textarea 
                         id="jg1-bumbu" 
                         name="jg1-bumbu" 
-                        placeholder="Masukkan item (satu per baris), contoh: &#10; - merah 1 &#10; - putih 2"
+                        placeholder="Masukkan item (satu per baris)"
                     ></textarea>
                 </div>
             </div>
@@ -405,7 +462,7 @@
                     <textarea 
                         id="jg2-frozen" 
                         name="jg2-frozen" 
-                        placeholder="Masukkan item (satu per baris), contoh: &#10; - chikuwa &#10; - sosis jumbo &#10; - baso lobster"
+                        placeholder="Masukkan item (satu per baris)"
                     ></textarea>
                 </div>
 
@@ -414,7 +471,7 @@
                     <textarea 
                         id="jg2-lain" 
                         name="jg2-lain" 
-                        placeholder="Masukkan item (satu per baris), contoh: &#10; - sterofoam"
+                        placeholder="Masukkan item (satu per baris)"
                     ></textarea>
                 </div>
 
@@ -423,10 +480,10 @@
                     <textarea 
                         id="jg2-bumbu" 
                         name="jg2-bumbu" 
-                        placeholder="Masukkan item (satu per baris), contoh: &#10; - merah 1 &#10; - putih 2"
+                        placeholder="Masukkan item (satu per baris)"
                     ></textarea>
                 </div>
-            </div>
+            </div>        
 
             <div class="form-actions">
                 <button type="submit" class="btn-submit" id="submitBtn">📤 Submit</button>
@@ -441,15 +498,24 @@
         <div id="summarySection" class="summary-section">
             <div class="summary-title">📋 Formatted Summary</div>
             <div id="summaryContent" class="summary-content"></div>
-            <div id="responseSummary" class="summary-content"></div>
-            <button class="copy-btn" id="copyBtn">📋 Copy to Clipboard</button>
+            <button class="btn-action" id="copyBtn">📋 Copy Text</button>
+            <button class="btn-action" id="submitToScriptBtn" style="background: #48bb78;">🚀 Submit to Google</button>
+        </div>
+
+        <!-- Response dari Google Apps Script -->
+        <div id="responseSection" class="summary-section" style="display: none;">
+            <div class="response-box" id="responseBox">
+                <div class="response-title" id="responseTitle">📤 Response dari Google Apps Script</div>
+                <div class="response-message" id="responseMessage"></div>
+                <div class="response-summary" id="responseSummary"></div>
+            </div>
         </div>
     </div>
 
     <script>
-        // ⚠️ PENTING: Ganti dengan URL Google Apps Script Anda
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBbHXWyq-cdY39dXGHR8cM2H9q9sttHZsHpmTiSylHoub5jpMzAWFVlzRB0pnmXc4u3A/exec';
- 
+        // ⚠️ GANTI DENGAN URL WEB APP SCRIPT ANDA
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyBbHXWyq-cdY39dXGHR8cM2H9q9sttHZsHpmTiSylHoub5jpMzAWFVlzRB0pnmXc4u3A/exec';
+
         const form = document.getElementById('purchaseForm');
         const statusMessage = document.getElementById('statusMessage');
         const summarySection = document.getElementById('summarySection');
@@ -464,9 +530,9 @@
         const copyBtn = document.getElementById('copyBtn');
         const storeTabs = document.querySelectorAll('.store-tab');
         const storeContents = document.querySelectorAll('.tab-content');
- 
+
         let currentFormattedString = '';
- 
+
         // Tab switching
         storeTabs.forEach(tab => {
             tab.addEventListener('click', () => {
@@ -474,29 +540,29 @@
                 
                 storeTabs.forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
- 
+
                 storeContents.forEach(content => content.classList.remove('active'));
                 document.getElementById(storeId).classList.add('active');
             });
         });
- 
+
         // Form submission - Preview
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
- 
+
             // Generate formatted string
             currentFormattedString = generateFormattedString();
- 
+
             if (!currentFormattedString || currentFormattedString.trim() === '/laporan') {
                 showStatus('❌ Mohon isi minimal satu item', 'error');
                 return;
             }
- 
+
             // Tampilkan preview
             displaySummary(currentFormattedString);
             showStatus('✅ Preview generated! Klik "Submit to Google" untuk mengirim.', 'success');
         });
- 
+
         function generateFormattedString() {
             let result = '/laporan\n';
             
@@ -507,31 +573,31 @@
                 'lain': 'Lain',
                 'bumbu': 'Bumbu'
             };
- 
+
             stores.forEach(store => {
                 categories.forEach(category => {
                     const textarea = document.getElementById(`${store}-${category}`);
                     const value = textarea.value.trim();
- 
+
                     if (value) {
                         const storeUpper = store.toUpperCase();
                         const categoryLabel = categoryLabels[category];
                         
-                        result += `${categoryLabel} ${storeUpper}\n`;
+                        result += `${categoryLabel} ${storeUpper}\n\n`;
                         
                         const items = value.split('\n').filter(item => item.trim());
                         items.forEach(item => {
-                            result += `${item.trim()}\n`;
+                            result += `* ${item.trim()}\n`;
                         });
                         
                         result += '\n';
                     }
                 });
             });
- 
+
             return result.trim();
         }
- 
+
         function updateBadges() {
             ['jg1', 'jg2'].forEach(storeId => {
                 const frozen = document.getElementById(`${storeId}-frozen`).value.trim();
@@ -542,29 +608,29 @@
                 document.getElementById(`badge-${storeId}`).textContent = count;
             });
         }
- 
+
         form.addEventListener('input', updateBadges);
- 
+
         // Submit ke Google Apps Script Web App
         submitToScriptBtn.addEventListener('click', async () => {
             if (!currentFormattedString) {
                 showStatus('❌ Silakan buat preview terlebih dahulu', 'error');
                 return;
             }
- 
+
             if (WEB_APP_URL === 'https://script.google.com/macros/d/YOUR_SCRIPT_ID/useweb/exec') {
                 showStatus('❌ Silakan set Web App URL terlebih dahulu', 'error');
                 return;
             }
- 
+
             await submitToWebApp(currentFormattedString);
         });
- 
+
         async function submitToWebApp(formattedString) {
             submitToScriptBtn.disabled = true;
             showStatus('📤 Mengirim ke Google Apps Script...', 'loading');
             responseSection.style.display = 'none';
- 
+
             try {
                 const response = await fetch(WEB_APP_URL, {
                     method: 'POST',
@@ -576,17 +642,15 @@
                         rawText: formattedString
                     })
                 });
- 
-                const responseData = await response.json();
 
-                console.log("response ", responseData);
+                const responseData = await response.json();
                 
                 showStatus('✅ Response diterima!', 'success');
                 displayResponse(responseData);
                 form.reset();
                 summarySection.style.display = 'none';
                 updateBadges();
- 
+
             } catch (error) {
                 console.error('Error:', error);
                 showStatus('❌ Gagal mengirim. Periksa URL Web App.', 'error');
@@ -595,23 +659,23 @@
                 submitToScriptBtn.disabled = false;
             }
         }
- 
+
         function showStatus(message, type) {
             statusMessage.textContent = message;
             statusMessage.className = `status-message visible status-${type}`;
- 
+
             if (type !== 'loading') {
                 setTimeout(() => {
                     statusMessage.classList.remove('visible');
                 }, 5000);
             }
         }
- 
+
         function displaySummary(formattedString) {
             summaryContent.textContent = formattedString;
             summarySection.classList.add('visible');
         }
- 
+
         function displayResponse(data) {
             responseSection.style.display = 'block';
             
@@ -637,11 +701,11 @@
                 responseMessage.textContent = data.error || 'Terjadi kesalahan saat memproses data';
                 responseSummary.textContent = JSON.stringify(data, null, 2);
             }
- 
+
             // Scroll ke response
             responseSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
- 
+
         function displayErrorResponse(errorMessage) {
             responseSection.style.display = 'block';
             responseBox.className = 'response-box response-error';
@@ -649,14 +713,14 @@
             responseMessage.textContent = `Error: ${errorMessage}`;
             responseSummary.textContent = 'Pastikan URL Web App sudah benar dan script sudah di-deploy.';
         }
- 
+
         // Copy to clipboard
         copyBtn.addEventListener('click', () => {
             if (!currentFormattedString) {
                 showStatus('❌ Tidak ada text untuk di-copy', 'error');
                 return;
             }
- 
+
             navigator.clipboard.writeText(currentFormattedString).then(() => {
                 const originalText = copyBtn.textContent;
                 copyBtn.textContent = '✅ Copied!';
@@ -665,7 +729,7 @@
                 }, 2000);
             });
         });
- 
+
         updateBadges();
     </script>
 </body>
